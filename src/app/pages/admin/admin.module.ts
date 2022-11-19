@@ -6,8 +6,10 @@ import { AdmopcionesComponent } from './admopciones/admopciones.component';
 import { FormsModule } from '@angular/forms';
 import { SeguridadRoutingModule } from '../seguridad/seguridad-routing.module';
 import { ThemeModule } from '../../@theme/theme.module';
-import { NbActionsModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbDatepickerModule, NbIconModule, NbInputModule, NbRadioModule, NbSelectModule, NbUserModule } from '@nebular/theme';
+import { NbActionsModule, NbAlertModule, NbButtonModule, NbCardModule, NbCheckboxModule, NbDatepickerModule, NbIconModule, NbInputModule, NbRadioModule, NbSelectModule, NbUserModule } from '@nebular/theme';
 import { FormsRoutingModule } from '../forms/forms-routing.module';
+
+
 
 
 @NgModule({
@@ -31,7 +33,8 @@ import { FormsRoutingModule } from '../forms/forms-routing.module';
     NbDatepickerModule,
     FormsRoutingModule,
     NbSelectModule,
-    NbIconModule
+    NbIconModule,
+    NbAlertModule
   ]
 })
 export class AdminModule { }

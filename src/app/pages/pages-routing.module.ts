@@ -16,6 +16,11 @@ const routes: Routes = [{
         .then(m=> m.AdminModule),
     },
     {
+      path: 'jurado',
+      loadChildren: () => import('./jurado/jurado.module')
+        .then(m=> m.JuradoModule),
+    },
+    {
       path: 'seguridad',
       loadChildren: () => import('./seguridad/seguridad.module')
         .then(m=> m.SeguridadModule),

@@ -8,9 +8,21 @@ import { Router } from '@angular/router';
 })
 export class AdmopcionesComponent implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  usuarios(): void{
+
+  }
+
+  roles(): void{
+    
+  }
+
+  permisos(): void{
+    
   }
 
 }

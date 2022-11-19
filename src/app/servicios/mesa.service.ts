@@ -2,21 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs-compat';
 import { environment } from '../../environments/environment';
-import { Candidato } from '../modelos/candidato.model';
+import { Mesa } from '../modelos/mesa.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CandidatoService {
+export class MesaService {
 
   constructor(private clienteHttp: HttpClient) { }
 
-  listar(): Observable<Candidato[]>{
-    return this.clienteHttp.get<Candidato[]>(`${environment.url_api_gateway}/candidatos`)
+  listar(): Observable<Mesa[]>{
+    return this.clienteHttp.get<Mesa[]>(`${environment.url_api_gateway}/mesas`)
   }
-
-  eliminar(){}
   
+  eliminar(){}
+
   crear(){}
 
   actualizar(){}

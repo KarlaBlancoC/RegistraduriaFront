@@ -2,21 +2,21 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs-compat';
 import { environment } from '../../environments/environment';
-import { Candidato } from '../modelos/candidato.model';
+import { Rol } from '../modelos/rol.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CandidatoService {
+export class RolService {
 
   constructor(private clienteHttp: HttpClient) { }
 
-  listar(): Observable<Candidato[]>{
-    return this.clienteHttp.get<Candidato[]>(`${environment.url_api_gateway}/candidatos`)
+  listar(): Observable<Rol[]>{
+    return this.clienteHttp.get<Rol[]>(`${environment.url_api_gateway}/roles`)   
   }
 
   eliminar(){}
-  
+
   crear(){}
 
   actualizar(){}

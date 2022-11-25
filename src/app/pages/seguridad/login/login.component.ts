@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
     
     this.serviciosSeguridad.login(u).subscribe(
       data=>{
+        console.log(data)
         this.serviciosSeguridad.guardarDatosSesion(data);
         this.router.navigate(["pages/dashboard"]);
         Swal.fire({

@@ -26,6 +26,11 @@ const routes: Routes = [{
         .then(m=> m.SeguridadModule),
     },
     {
+      path: 'candidato',
+      loadChildren: () => import('./candidato/candidato.module')
+        .then(m=> m.CandidatoModule),
+    },
+    {
       path: 'dashboard',
       component: ECommerceComponent,
     },

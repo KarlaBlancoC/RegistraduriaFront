@@ -8,8 +8,8 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { SeguridadService } from '../servicios/seguridad.service';
-import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -18,22 +18,31 @@ export class TokenInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
-    if(this.servicioSeguridad.usuarioSesionActiva){
+    if(this.servicioSeguridad.usuarioSesionActiva) {
       request = request.clone({
         setHeaders:{
           Authorization: "Bearer " + this.servicioSeguridad.usuarioSesionActiva.token
         }
-      })
+      });
     }
 
     return next.handle(request).pipe(
       catchError((err: HttpErrorResponse) => {
-        if(err.status == 401){
-          this.router.navigateByUrl("/pages/dashboard")
+        if(err.status == 401) {
+
+          if(err.error["msg"] === "Token has expired" || err.error["msg"] === "Missing Authorization Header")
+          {
+            this.servicioSeguridad.logout();
+            this.router.navigateByUrl("/pages/seguridad/login");
+          }
+          else {
+            
+          }
+          
         }
         return throwError(err)
-      }
-      )
-    );
+      })
+    )
   }
+
 }

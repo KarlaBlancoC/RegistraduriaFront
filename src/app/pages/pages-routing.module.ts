@@ -31,6 +31,26 @@ const routes: Routes = [{
         .then(m=> m.CandidatoModule),
     },
     {
+      path: 'partido',
+      loadChildren: () => import('./partido/partido.module')
+        .then(m=> m.PartidoModule),
+    },
+    {
+      path: 'usuario',
+      loadChildren: () => import('./usuario/usuario.module')
+        .then(m=> m.UsuarioModule),
+    },
+    {
+      path: 'mesa',
+      loadChildren: () => import('./mesa/mesa.module')
+        .then(m=> m.MesaModule),
+    },
+    {
+      path: 'resultado',
+      loadChildren: () => import('./resultado/resultado.module')
+        .then(m=> m.ResultadoModule),
+    },
+    {
       path: 'dashboard',
       component: ECommerceComponent,
     },

@@ -15,9 +15,13 @@ export class ResultadoService {
     return this.clienteHttp.get<Resultado[]>(`${environment.url_api_gateway}/resultados`)
   }
   
-  eliminar(){}
+  eliminar(id: string): Observable<Resultado>{
+    return this.clienteHttp.delete<Resultado>(`${environment.url_api_gateway}/resultado/${id}`)
+  }
 
-  crear(){}
+  crear(nuevo_resultado: Resultado): Observable<Resultado>{
+    return this.clienteHttp.post<Resultado>(`${environment.url_api_gateway}/resultado`,nuevo_resultado)
+  }
 
   actualizar(){}
 }

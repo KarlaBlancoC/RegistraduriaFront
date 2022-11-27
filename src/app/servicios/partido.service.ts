@@ -14,10 +14,18 @@ export class PartidoService {
   listar(): Observable<Partido[]>{
     return this.clienteHttp.get<Partido[]>(`${environment.url_api_gateway}/partidos`)
   }
-  
-  eliminar(){}
 
-  crear(){}
+  buscar_id_nombre(nombre):Observable<Partido[]>{
+    
+    return this.clienteHttp.post<Partido[]>(`${environment.url_api_gateway}/partido/query`,nombre)
+  }
 
+  eliminar(id: string): Observable<Partido>{
+    return this.clienteHttp.delete<Partido>(`${environment.url_api_gateway}/partido/${id}`)
+  }
+
+  crear(nuevo_partido): Observable<Partido>{
+    return this.clienteHttp.post<Partido>(`${environment.url_api_gateway}/partido`,nuevo_partido)
+  }
   actualizar(){}
 }

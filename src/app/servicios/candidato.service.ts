@@ -15,9 +15,19 @@ export class CandidatoService {
     return this.clienteHttp.get<Candidato[]>(`${environment.url_api_gateway}/candidatos`)
   }
 
-  eliminar(){}
+  eliminar(id: string): Observable<Candidato>{
+    return this.clienteHttp.delete<Candidato>(`${environment.url_api_gateway}/candidato/${id}`)
+  }
   
-  crear(){}
+  crear(nuevo_candidato: Candidato): Observable<Candidato>{
+    return this.clienteHttp.post<Candidato>(`${environment.url_api_gateway}/candidato`,nuevo_candidato)
+  }
 
-  actualizar(){}
+  buscar_id_cedula(cedula): Observable<Candidato[]>{
+    return this.clienteHttp.post<Candidato[]>(`${environment.url_api_gateway}/candidato/query`,cedula)
+  }
+
+  actualizar(candidato: Candidato, id: string): Observable<Candidato>{
+    return this.clienteHttp.put<Candidato>(`${environment.url_api_gateway}/candidato/${id}`,candidato)
+  }
 }

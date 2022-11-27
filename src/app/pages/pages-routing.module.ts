@@ -11,16 +11,6 @@ const routes: Routes = [{
   component: PagesComponent,
   children: [
     {
-      path: 'admin',
-      loadChildren: () => import('./admin/admin.module')
-        .then(m=> m.AdminModule),
-    },
-    {
-      path: 'jurado',
-      loadChildren: () => import('./jurado/jurado.module')
-        .then(m=> m.JuradoModule),
-    },
-    {
       path: 'seguridad',
       loadChildren: () => import('./seguridad/seguridad.module')
         .then(m=> m.SeguridadModule),

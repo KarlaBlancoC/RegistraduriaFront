@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Partido } from '../../../modelos/partido.model';
 import { CandidatoService } from '../../../servicios/candidato.service';
@@ -80,7 +79,8 @@ export class ListarComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#68BE00',
       cancelButtonColor: '#FF593C',
-      confirmButtonText: 'Si, eliminar'
+      confirmButtonText: 'Si, eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result)=>{
       if(result.isConfirmed){
         this.servicioCandidato.eliminar(candidato_a_eliminar._id).subscribe(
@@ -118,7 +118,11 @@ export class ListarComponent implements OnInit {
           'El candidato ha sido creado exitosamente',
           'success'
         )
-        event.confirm.resolve();
+        this.servicioCandidato.listar().subscribe(
+          data=> {
+            this.source = data;
+          }
+        )
       }
     ) 
       }
@@ -127,7 +131,18 @@ export class ListarComponent implements OnInit {
 
   editConfirm(event){
     let candidato_actualizar = event.newData;
-    let nombre_partido = candidato_actualizar["partido"]
+    Swal.fire({
+      title: 'Actualizar candidato',
+      text: "¿Está seguro que quiere actualizar al candidato "+ candidato_actualizar.nombre + "?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#68BE00',
+      cancelButtonColor: '#FF593C',
+      confirmButtonText: 'Si, actualizar',
+      cancelButtonText: 'Cancelar'
+    }).then((result)=>{
+      if(result.isConfirmed){
+        let nombre_partido = candidato_actualizar["partido"]
     delete candidato_actualizar["partido"]
     let nombre_partido2 = {nombre:{$eq:nombre_partido}}
     let partido = []
@@ -151,6 +166,11 @@ export class ListarComponent implements OnInit {
     ) 
       }
     )
+      }
+    }
+
+    )
+    
     
     
     

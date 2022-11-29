@@ -30,7 +30,17 @@ export class LoginComponent implements OnInit {
       data=>{
         console.log(data)
         this.serviciosSeguridad.guardarDatosSesion(data);
-        this.router.navigate(["pages/dashboard"]);
+        this.serviciosSeguridad.getUsuarioPorId(data.user_id).subscribe(
+          response => {
+            if(response.rol.nombre === "Administrador")
+              this.router.navigate(["pages/resultado/listar"])
+            else
+              if(response.rol.nombre === "Jurado")
+                this.router.navigate(["pages/resultado/listar"])
+              else
+               this.router.navigate(["pages/resultado/listar"])
+          }
+        )
         Swal.fire({
           icon: 'success',
           title: 'OK',

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MesaService } from '../../../servicios/mesa.service';
 import Swal from 'sweetalert2';
+import { SeguridadService } from '../../../servicios/seguridad.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-listar',
@@ -9,7 +11,8 @@ import Swal from 'sweetalert2';
 })
 export class ListarComponent implements OnInit {
 
-  constructor(private servicioMesa: MesaService) { }
+  constructor(private servicioMesa: MesaService, private servicioSeguridad: SeguridadService,
+    private router: Router) { }
 
   settings = {
     add: {
@@ -44,6 +47,14 @@ export class ListarComponent implements OnInit {
   source = []
 
   ngOnInit(): void {
+    this.servicioSeguridad.getUsuarioPorId(this.servicioSeguridad.usuarioSesionActiva._id).subscribe(
+      response => {
+        if (response.rol.nombre != "jurado")
+          this.router.navigate(["pages/mesa/listar"]);
+        else
+          this.router.navigate(["pages/visualizar-mesas/listar"]);
+      }
+    )
     this.servicioMesa.listar().subscribe(
       data=> {
         this.source = data;
@@ -93,6 +104,31 @@ export class ListarComponent implements OnInit {
     )
   }
 
-  editConfirm(event){}
-
+  editConfirm(event){
+    let mesa_actualizar = event.newData;
+    Swal.fire({
+      title: 'Actualizar mesa',
+      text: "¿Está seguro que quiere actualizar la mesa "+ mesa_actualizar._id + "?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#68BE00',
+      cancelButtonColor: '#FF593C',
+      confirmButtonText: 'Si, actualizar',
+      cancelButtonText: 'Cancelar'
+    }).then((result)=>{
+      if(result.isConfirmed){
+        let id_mesa = mesa_actualizar["_id"]
+        this.servicioMesa.actualizar(mesa_actualizar,id_mesa).subscribe(
+          data=>{
+            Swal.fire(
+              'Actualizada!',
+              'La mesa ' + mesa_actualizar["_id"] + ' ha sido actualizada exitosamente',
+              'success'
+            ); event.confirm.resolve();
+          }
+        )
+      }
+    }
+    )
+  }
 }

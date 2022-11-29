@@ -23,5 +23,7 @@ export class MesaService {
     return this.clienteHttp.post<Mesa>(`${environment.url_api_gateway}/mesa`,nueva_mesa)
   }
 
-  actualizar(){}
+  actualizar(mesa_actualizar: Mesa,id: String): Observable<Mesa>{
+    return this.clienteHttp.put<Mesa>(`${environment.url_api_gateway}/mesa/${id}`,mesa_actualizar)
+  }
 }

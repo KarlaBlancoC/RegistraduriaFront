@@ -27,5 +27,7 @@ export class PartidoService {
   crear(nuevo_partido): Observable<Partido>{
     return this.clienteHttp.post<Partido>(`${environment.url_api_gateway}/partido`,nuevo_partido)
   }
-  actualizar(){}
+  actualizar(partido_actualizar: Partido, id: String): Observable<Partido>{
+    return this.clienteHttp.put<Partido>(`${environment.url_api_gateway}/partido/${id}`,partido_actualizar)
+  }
 }

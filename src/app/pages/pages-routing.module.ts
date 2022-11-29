@@ -11,6 +11,26 @@ const routes: Routes = [{
   component: PagesComponent,
   children: [
     {
+      path: 'visualizar-candidatos',
+      loadChildren: () => import('./visualizar-candidatos/visualizar-candidatos.module')
+        .then(m=> m.VisualizarCandidatosModule),
+    },
+    {
+      path: 'visualizar-partidos',
+      loadChildren: () => import('./visualizar-partidos/visualizar-partidos.module')
+        .then(m=> m.VisualizarPartidosModule),
+    },
+    {
+      path: 'visualizar-mesas',
+      loadChildren: () => import('./visualizar-mesas/visualizar-mesas.module')
+        .then(m=> m.VisualizarMesasModule),
+    },
+    {
+      path: 'visualizar-resultados',
+      loadChildren: () => import('./visualizar-resultados/visualizar-resultados.module')
+        .then(m=> m.VisualizarResultadosModule),
+    },
+    {
       path: 'seguridad',
       loadChildren: () => import('./seguridad/seguridad.module')
         .then(m=> m.SeguridadModule),

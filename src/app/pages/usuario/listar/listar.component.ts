@@ -11,7 +11,8 @@ import { SeguridadService } from '../../../servicios/seguridad.service';
 })
 export class ListarComponent implements OnInit {
 
-  constructor(private servicioUsuario: UsuarioService) { }
+  constructor(private servicioUsuario: UsuarioService, private servicioSeguridad: SeguridadService,
+    private router: Router) { }
 
   settings = {
     add: {
@@ -50,6 +51,22 @@ export class ListarComponent implements OnInit {
   source = []
 
   ngOnInit(): void {
+    this.servicioSeguridad.getUsuarioPorId(this.servicioSeguridad.usuarioSesionActiva._id).subscribe(
+      response => {
+        if (response.rol.nombre != "jurado")
+          {}
+        else{Swal.fire({
+          title: 'No autorizado',
+          text: "Usted no está autorizado para ejecutar esta acción",
+          icon: 'error',
+          confirmButtonColor: '#68BE00',
+          confirmButtonText: 'Ok'
+        })
+          this.router.navigate(["pages/resultado/listar"])}
+          
+          
+      }
+    )
     this.servicioUsuario.listar().subscribe(
       data=> {
         this.source = data;

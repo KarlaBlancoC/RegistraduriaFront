@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ResultadoService } from '../../../servicios/resultado.service';
 import Swal from 'sweetalert2';
 import { CandidatoService } from '../../../servicios/candidato.service';
+import { SeguridadService } from '../../../servicios/seguridad.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-listar',
@@ -10,7 +12,8 @@ import { CandidatoService } from '../../../servicios/candidato.service';
 })
 export class ListarComponent implements OnInit {
 
-  constructor(private servicioResultado: ResultadoService, private servicioCandidato: CandidatoService) { }
+  constructor(private servicioResultado: ResultadoService, private servicioCandidato: CandidatoService,
+    private servicioSeguridad: SeguridadService, private router: Router) { }
 
   settings = {
     add: {
@@ -139,5 +142,49 @@ export class ListarComponent implements OnInit {
     )
   }
 
-  editConfirm(event){}
+  editConfirm(event){
+    let resultado_actualizar = event.newData;
+    Swal.fire({
+      title: 'Actualizar resultado',
+      text: "¿Está seguro que quiere actualizar el resultado con el id "+ resultado_actualizar._id + "?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#68BE00',
+      cancelButtonColor: '#FF593C',
+      confirmButtonText: 'Si, actualizar',
+      cancelButtonText: 'Cancelar'
+    }).then((result)=>{
+      delete resultado_actualizar["nombre_candidato"]
+      delete resultado_actualizar["apellido_candidato"]
+      delete resultado_actualizar["nombre_partido"]
+      let laCedula = resultado_actualizar["cedula_candidato"]
+      let cedula1 = parseInt(laCedula)
+      let laCedulaCandidato = {cedula:{$eq:cedula1}}
+      let candidato = []
+      this.servicioCandidato.buscar_id_cedula(laCedulaCandidato).subscribe(
+        query =>{
+          candidato = query
+          console.log(candidato)
+          let elCandidato = {}
+          elCandidato = candidato[0],
+          console.log(elCandidato)
+          resultado_actualizar["id_candidato"] = elCandidato["_id"]
+          let id_resultado = resultado_actualizar["_id"]
+          this.servicioResultado.actualizar(resultado_actualizar,id_resultado).subscribe(
+            data => {
+              Swal.fire(
+                'Actualizado',
+                'El resultado ha sido actualizado correctamente',
+                'success'
+              )
+              event.confirm.resolve();
+            }
+          )
+
+        }
+
+      )
+    }
+    )
+  }
 }

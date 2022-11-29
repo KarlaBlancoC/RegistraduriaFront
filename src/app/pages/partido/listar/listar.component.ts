@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PartidoService } from '../../../servicios/partido.service';
 import Swal from 'sweetalert2';
+import { SeguridadService } from '../../../servicios/seguridad.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-listar',
@@ -9,7 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class ListarComponent implements OnInit {
 
-  constructor(private servicioPartido: PartidoService) { }
+  constructor(private servicioPartido: PartidoService, private servicioSeguridad: SeguridadService, private router: Router) { }
 
   settings = {
     add: {
@@ -48,11 +50,20 @@ export class ListarComponent implements OnInit {
   source = []
 
   ngOnInit(): void {
+    this.servicioSeguridad.getUsuarioPorId(this.servicioSeguridad.usuarioSesionActiva._id).subscribe(
+      response => {
+        if (response.rol.nombre != "jurado")
+          this.router.navigate(["pages/partido/listar"]);
+        else
+          this.router.navigate(["pages/visualizar-partidos/listar"]);
+      }
+    )
     this.servicioPartido.listar().subscribe(
       data=> {
         this.source = data;
       }
     )
+
   }
 
   deleteConfirm(event){
@@ -98,6 +109,32 @@ export class ListarComponent implements OnInit {
     )
   }
 
-  editConfirm(event){}
+  editConfirm(event){
+    let partido_actualizar = event.newData;
+    Swal.fire({
+      title: 'Actualizar partido',
+      text: "¿Está seguro que quiere actualizar el partido "+ partido_actualizar.nombre + "?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#68BE00',
+      cancelButtonColor: '#FF593C',
+      confirmButtonText: 'Si, actualizar',
+      cancelButtonText: 'Cancelar'
+    }).then((result)=>{
+      if(result.isConfirmed){
+        let id_partido = partido_actualizar["_id"]
+        this.servicioPartido.actualizar(partido_actualizar,id_partido).subscribe(
+          data=>{
+            Swal.fire(
+              'Actualizado!',
+              'El partido ' + partido_actualizar["nombre"] + ' ha sido actualizado exitosamente',
+              'success'
+            ); event.confirm.resolve();
+          }
+        )
+      }
+    }
+    )
+  }
 
 }

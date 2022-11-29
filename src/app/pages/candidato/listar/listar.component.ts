@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { Partido } from '../../../modelos/partido.model';
 import { CandidatoService } from '../../../servicios/candidato.service';
 import { PartidoService } from '../../../servicios/partido.service';
+import { SeguridadService } from '../../../servicios/seguridad.service';
 
 @Component({
   selector: 'ngx-listar',
@@ -11,7 +13,8 @@ import { PartidoService } from '../../../servicios/partido.service';
 })
 export class ListarComponent implements OnInit {
 
-  constructor(private servicioCandidato: CandidatoService, private servicioPartido: PartidoService) { }
+  constructor(private servicioCandidato: CandidatoService, private servicioPartido: PartidoService,
+    private servicioSeguridad: SeguridadService, private router: Router) { }
 
   settings = {
     add: {
@@ -63,6 +66,14 @@ export class ListarComponent implements OnInit {
   
 
   ngOnInit(): void {
+    this.servicioSeguridad.getUsuarioPorId(this.servicioSeguridad.usuarioSesionActiva._id).subscribe(
+      response => {
+        if (response.rol.nombre != "jurado")
+          this.router.navigate(["pages/candidato/listar"]);
+        else
+          this.router.navigate(["pages/visualizar-candidatos/listar"]);
+      }
+    )
     this.servicioCandidato.listar().subscribe(
       data=> {
         this.source = data;
@@ -102,6 +113,10 @@ export class ListarComponent implements OnInit {
     let nuevo_candidato = event.newData;
     let nombre_partido = nuevo_candidato["partido"]
     delete nuevo_candidato["partido"]
+    let cedula = nuevo_candidato["cedula"]
+    let cedula1 = parseInt(cedula)
+    delete nuevo_candidato["cedula"]
+    nuevo_candidato["cedula"]= cedula1
     let nombre_partido2 = {nombre:{$eq:nombre_partido}}
     let partido = []
     this.servicioPartido.buscar_id_nombre(nombre_partido2).subscribe(
@@ -168,12 +183,7 @@ export class ListarComponent implements OnInit {
     )
       }
     }
-
     )
-    
-    
-    
-    
   }
 
 

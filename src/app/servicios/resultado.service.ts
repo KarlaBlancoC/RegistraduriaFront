@@ -23,5 +23,7 @@ export class ResultadoService {
     return this.clienteHttp.post<Resultado>(`${environment.url_api_gateway}/resultado`,nuevo_resultado)
   }
 
-  actualizar(){}
+  actualizar(resultado_actualizar: Resultado, id: String): Observable<Resultado>{
+    return this.clienteHttp.put<Resultado>(`${environment.url_api_gateway}/resultado/${id}`,resultado_actualizar)
+  }
 }
